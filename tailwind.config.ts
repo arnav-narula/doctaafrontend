@@ -13,6 +13,11 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        doctaa: {
+          pink: '#D4537E',
+          cream: '#F8F4F6',
+          navy: '#0A1628',
+        },
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         card: {

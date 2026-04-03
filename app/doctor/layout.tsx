@@ -1,11 +1,11 @@
 import type React from "react"
 import { AppSidebar } from "@/components/app-sidebar"
 import { SiteHeader } from "@/components/site-header"
-import { SidebarInset } from "@/components/ui/sidebar"
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 
 export default function DoctorLayout({ children }: { children: React.ReactNode }) {
   return (
-    <>
+    <SidebarProvider>
       <AppSidebar variant="inset" />
       <SidebarInset className="flex w-full flex-col h-screen overflow-hidden">
         <SiteHeader basePath="doctor" />
@@ -15,6 +15,6 @@ export default function DoctorLayout({ children }: { children: React.ReactNode }
           </div>
         </div>
       </SidebarInset>
-    </>
+    </SidebarProvider>
   )
 }
