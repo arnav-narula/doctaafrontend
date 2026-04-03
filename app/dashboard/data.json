@@ -1,0 +1,272 @@
+[
+  {
+    "id": 1,
+    "header": "Patient: John Smith",
+    "type": "Consultation",
+    "status": "In Progress",
+    "target": "30",
+    "limit": "15",
+    "reviewer": "Dr. Sarah Chen"
+  },
+  {
+    "id": 2,
+    "header": "Vitals Assessment",
+    "type": "Medical",
+    "status": "Completed",
+    "target": "5",
+    "limit": "5",
+    "reviewer": "AI Assistant"
+  },
+  {
+    "id": 3,
+    "header": "Prescription: Amoxicillin",
+    "type": "Prescription",
+    "status": "Completed",
+    "target": "10",
+    "limit": "8",
+    "reviewer": "Dr. Sarah Chen"
+  },
+  {
+    "id": 4,
+    "header": "Follow-up: Patient Recovery",
+    "type": "Follow-up",
+    "status": "Completed",
+    "target": "7",
+    "limit": "6",
+    "reviewer": "Nurse Assistant"
+  },
+  {
+    "id": 5,
+    "header": "Lab Results Review",
+    "type": "Medical",
+    "status": "In Progress",
+    "target": "2",
+    "limit": "3",
+    "reviewer": "Dr. Emily Watson"
+  },
+  {
+    "id": 6,
+    "header": "Patient: Mary Johnson",
+    "type": "Consultation",
+    "status": "In Progress",
+    "target": "45",
+    "limit": "20",
+    "reviewer": "Dr. Michael Brown"
+  },
+  {
+    "id": 7,
+    "header": "Medication Review",
+    "type": "Medical",
+    "status": "In Progress",
+    "target": "25",
+    "limit": "18",
+    "reviewer": "Pharmacist"
+  },
+  {
+    "id": 8,
+    "header": "Allergy Documentation",
+    "type": "Medical",
+    "status": "Completed",
+    "target": "15",
+    "limit": "14",
+    "reviewer": "Medical Assistant"
+  },
+  {
+    "id": 9,
+    "header": "Patient Education: Diabetes",
+    "type": "Education",
+    "status": "Completed",
+    "target": "30",
+    "limit": "28",
+    "reviewer": "Health Coach"
+  },
+  {
+    "id": 10,
+    "header": "Chronic Disease Management",
+    "type": "Medical",
+    "status": "Completed",
+    "target": "20",
+    "limit": "19",
+    "reviewer": "Dr. Sarah Chen"
+  },
+  {
+    "id": 11,
+    "header": "Mental Health Assessment",
+    "type": "Mental Health",
+    "status": "Completed",
+    "target": "15",
+    "limit": "12",
+    "reviewer": "Psychiatrist"
+  },
+  {
+    "id": 12,
+    "header": "Preventive Care Plan",
+    "type": "Medical",
+    "status": "Completed",
+    "target": "25",
+    "limit": "24",
+    "reviewer": "Primary Care Physician"
+  },
+  {
+    "id": 13,
+    "header": "Vaccination Records",
+    "type": "Medical",
+    "status": "Completed",
+    "target": "10",
+    "limit": "10",
+    "reviewer": "Nurse"
+  },
+  {
+    "id": 14,
+    "header": "Insurance Verification",
+    "type": "Administrative",
+    "status": "Completed",
+    "target": "5",
+    "limit": "5",
+    "reviewer": "Billing Department"
+  },
+  {
+    "id": 15,
+    "header": "Patient: Robert Williams",
+    "type": "Consultation",
+    "status": "In Progress",
+    "target": "20",
+    "limit": "10",
+    "reviewer": "Dr. James Lee"
+  },
+  {
+    "id": 16,
+    "header": "Emergency Alert Review",
+    "type": "Medical",
+    "status": "In Progress",
+    "target": "3",
+    "limit": "2",
+    "reviewer": "Emergency Coordinator"
+  },
+  {
+    "id": 17,
+    "header": "Telemedicine Session",
+    "type": "Consultation",
+    "status": "Completed",
+    "target": "60",
+    "limit": "45",
+    "reviewer": "Dr. Sarah Chen"
+  },
+  {
+    "id": 18,
+    "header": "Remote Monitoring Data",
+    "type": "Medical",
+    "status": "Completed",
+    "target": "24",
+    "limit": "20",
+    "reviewer": "AI Assistant"
+  },
+  {
+    "id": 19,
+    "header": "Appointment Scheduling",
+    "type": "Administrative",
+    "status": "Completed",
+    "target": "30",
+    "limit": "28",
+    "reviewer": "Scheduler"
+  },
+  {
+    "id": 20,
+    "header": "Patient Feedback Survey",
+    "type": "Administrative",
+    "status": "Completed",
+    "target": "15",
+    "limit": "12",
+    "reviewer": "Patient Services"
+  },
+  {
+    "id": 21,
+    "header": "Symptom Analysis Report",
+    "type": "Medical",
+    "status": "In Progress",
+    "target": "35",
+    "limit": "28",
+    "reviewer": "AI Assistant"
+  },
+  {
+    "id": 22,
+    "header": "Care Plan Development",
+    "type": "Medical",
+    "status": "Completed",
+    "target": "40",
+    "limit": "35",
+    "reviewer": "Dr. Emily Watson"
+  },
+  {
+    "id": 23,
+    "header": "HIPAA Compliance Check",
+    "type": "Administrative",
+    "status": "In Progress",
+    "target": "15",
+    "limit": "12",
+    "reviewer": "Compliance Officer"
+  },
+  {
+    "id": 24,
+    "header": "Referral Management",
+    "type": "Administrative",
+    "status": "Completed",
+    "target": "20",
+    "limit": "18",
+    "reviewer": "Care Coordinator"
+  },
+  {
+    "id": 25,
+    "header": "Patient: Lisa Anderson",
+    "type": "Consultation",
+    "status": "In Progress",
+    "target": "25",
+    "limit": "15",
+    "reviewer": "Dr. Michael Brown"
+  },
+  {
+    "id": 26,
+    "header": "Drug Interaction Check",
+    "type": "Medical",
+    "status": "Completed",
+    "target": "10",
+    "limit": "10",
+    "reviewer": "Pharmacist"
+  },
+  {
+    "id": 27,
+    "header": "Pain Management Review",
+    "type": "Medical",
+    "status": "In Progress",
+    "target": "18",
+    "limit": "14",
+    "reviewer": "Specialist"
+  },
+  {
+    "id": 28,
+    "header": "Billing Statement Review",
+    "type": "Financial",
+    "status": "Completed",
+    "target": "30",
+    "limit": "28",
+    "reviewer": "Billing"
+  },
+  {
+    "id": 29,
+    "header": "Patient: David Martinez",
+    "type": "Consultation",
+    "status": "In Progress",
+    "target": "35",
+    "limit": "20",
+    "reviewer": "Dr. James Lee"
+  },
+  {
+    "id": 30,
+    "header": "Clinical Trial Information",
+    "type": "Research",
+    "status": "Completed",
+    "target": "12",
+    "limit": "10",
+    "reviewer": "Research Coordinator"
+  }
+]
