@@ -2,12 +2,8 @@
 
 import Link from "next/link"
 import { useState, useEffect, useRef } from "react"
-import { motion, useInView, useAnimation, AnimatePresence } from "framer-motion"
-import {
-  MessageSquare, CalendarDays, FileText, Shield,
-  Star, Clock, Users, ArrowRight, CheckCircle2,
-  Lock, Send, ChevronDown,
-} from "lucide-react"
+import { motion, useInView } from "framer-motion"
+import { Lock, Send, ChevronDown, ArrowRight, ArrowUpRight } from "lucide-react"
 
 // ─── Brand ────────────────────────────────────────────────────────────────────
 const PINK  = "#D4537E"
@@ -23,43 +19,42 @@ const SUGGESTIONS = [
 ]
 
 const FEATURES = [
-  { icon: MessageSquare, title: "AI Health Chat",    desc: "Instant, evidence-based guidance from an AI trained on millions of clinical cases." },
-  { icon: CalendarDays,  title: "Smart Booking",     desc: "Book GPs and specialists in seconds. Telehealth, in-person, same-day where available." },
-  { icon: FileText,      title: "Unified Records",   desc: "All your health history, scripts, and results — one secure place, shareable instantly." },
-  { icon: Shield,        title: "Private by Design", desc: "End-to-end encrypted. Australian Privacy Act compliant. Your data is never sold." },
-]
-
-const STEPS = [
-  { n: "01", title: "Describe your symptoms",   body: "Type naturally — no forms, no jargon. Just tell doctaa what's going on." },
-  { n: "02", title: "Get instant AI guidance",  body: "Receive clear, clinically-informed information tailored to your situation." },
-  { n: "03", title: "Book care if you need it", body: "Connect with a GP or specialist directly — same day where available." },
-]
-
-const STATS = [
-  { value: "1.2M+", label: "Australians helped", icon: Users        },
-  { value: "24/7",  label: "Always available",   icon: Clock        },
-  { value: "4.8★",  label: "App Store rating",   icon: Star         },
-  { value: "<2 min",label: "Average response",   icon: MessageSquare},
+  { num: "01", title: "AI Health Chat",    desc: "Describe your symptoms in plain English. Get instant, evidence-based guidance — no waiting room, no appointment needed." },
+  { num: "02", title: "Smart Booking",     desc: "Book a GP or specialist in seconds. Same-day telehealth where available. Reminders handled automatically." },
+  { num: "03", title: "Unified Records",   desc: "Every script, result, and referral — one secure place. Share with any provider in a single tap." },
+  { num: "04", title: "Private by Design", desc: "End-to-end encrypted. Australian Privacy Act compliant. Your data belongs to you — never sold, never shared." },
 ]
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
-function FadeUp({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
+function FadeUp({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
   const ref = useRef(null)
-  const inView = useInView(ref, { once: true, margin: "-80px" })
+  const inView = useInView(ref, { once: true, margin: "-60px" })
   return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 32 }}
+    <motion.div ref={ref}
+      initial={{ opacity: 0, y: 28 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.65, delay, ease: [0.22, 1, 0.36, 1] }}
-      className={className}
+      transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
     >
       {children}
     </motion.div>
   )
 }
 
-// ─── Animated counter ─────────────────────────────────────────────────────────
+function FadeIn({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
+  const ref = useRef(null)
+  const inView = useInView(ref, { once: true, margin: "-60px" })
+  return (
+    <motion.div ref={ref}
+      initial={{ opacity: 0 }}
+      animate={inView ? { opacity: 1 } : {}}
+      transition={{ duration: 0.8, delay, ease: "easeOut" }}
+    >
+      {children}
+    </motion.div>
+  )
+}
+
+// ─── Counter ──────────────────────────────────────────────────────────────────
 function Counter({ to, suffix = "" }: { to: number; suffix?: string }) {
   const [count, setCount] = useState(0)
   const ref = useRef(null)
@@ -84,7 +79,6 @@ function Typewriter() {
   const [phraseIdx, setPhraseIdx] = useState(0)
   const [displayed, setDisplayed] = useState("")
   const [deleting, setDeleting] = useState(false)
-
   useEffect(() => {
     const full = PHRASES[phraseIdx]
     if (!deleting && displayed.length < full.length) {
@@ -104,7 +98,6 @@ function Typewriter() {
       setPhraseIdx(i => (i + 1) % PHRASES.length)
     }
   }, [displayed, deleting, phraseIdx])
-
   return (
     <span style={{ color: PINK }}>
       {displayed}
@@ -117,46 +110,29 @@ function Typewriter() {
   )
 }
 
-// ─── Animated orb background ──────────────────────────────────────────────────
+// ─── Orb background ───────────────────────────────────────────────────────────
 function OrbBackground() {
   return (
     <div style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none" }}>
-      {/* Grid */}
       <div style={{
         position: "absolute", inset: 0,
-        backgroundImage: `linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px),
-                          linear-gradient(90deg, rgba(255,255,255,0.022) 1px, transparent 1px)`,
+        backgroundImage: `linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.022) 1px, transparent 1px)`,
         backgroundSize: "72px 72px",
       }} />
-      {/* Orb 1 */}
       <motion.div
         animate={{ x: [0, 40, -20, 0], y: [0, -30, 20, 0], scale: [1, 1.1, 0.95, 1] }}
         transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
-        style={{
-          position: "absolute", top: "-15%", left: "30%",
-          width: "700px", height: "600px", borderRadius: "50%",
-          background: `radial-gradient(ellipse, ${PINK}22 0%, transparent 68%)`,
-        }}
+        style={{ position: "absolute", top: "-15%", left: "30%", width: "700px", height: "600px", borderRadius: "50%", background: `radial-gradient(ellipse, ${PINK}22 0%, transparent 68%)` }}
       />
-      {/* Orb 2 */}
       <motion.div
         animate={{ x: [0, -50, 30, 0], y: [0, 40, -20, 0], scale: [1, 0.9, 1.1, 1] }}
         transition={{ duration: 22, repeat: Infinity, ease: "easeInOut", delay: 3 }}
-        style={{
-          position: "absolute", bottom: "5%", right: "-10%",
-          width: "500px", height: "500px", borderRadius: "50%",
-          background: `radial-gradient(ellipse, ${PINK}14 0%, transparent 70%)`,
-        }}
+        style={{ position: "absolute", bottom: "5%", right: "-10%", width: "500px", height: "500px", borderRadius: "50%", background: `radial-gradient(ellipse, ${PINK}14 0%, transparent 70%)` }}
       />
-      {/* Orb 3 — subtle blue */}
       <motion.div
         animate={{ x: [0, 30, -40, 0], y: [0, -20, 40, 0] }}
         transition={{ duration: 25, repeat: Infinity, ease: "easeInOut", delay: 7 }}
-        style={{
-          position: "absolute", top: "40%", left: "-8%",
-          width: "400px", height: "400px", borderRadius: "50%",
-          background: `radial-gradient(ellipse, rgba(30,80,160,0.25) 0%, transparent 70%)`,
-        }}
+        style={{ position: "absolute", top: "40%", left: "-8%", width: "400px", height: "400px", borderRadius: "50%", background: "radial-gradient(ellipse, rgba(30,80,160,0.25) 0%, transparent 70%)" }}
       />
     </div>
   )
@@ -170,22 +146,20 @@ function Navbar() {
     window.addEventListener("scroll", fn)
     return () => window.removeEventListener("scroll", fn)
   }, [])
-
   return (
     <motion.nav
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
       style={{
-        position: "fixed", top: 0, left: 0, right: 0, zIndex: 50,
-        padding: "0 1.5rem",
-        transition: "background 0.3s",
+        position: "fixed", top: 0, left: 0, right: 0, zIndex: 50, padding: "0 1.5rem",
         background: scrolled ? `${NAVY}ee` : "transparent",
         backdropFilter: scrolled ? "blur(12px)" : "none",
         borderBottom: scrolled ? "1px solid rgba(255,255,255,0.06)" : "none",
+        transition: "background 0.3s, border 0.3s",
       }}
     >
-      <div style={{ maxWidth: "1100px", margin: "0 auto", height: "64px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+      <div style={{ maxWidth: "1200px", margin: "0 auto", height: "64px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <span style={{ color: PINK, fontWeight: 800, fontSize: "1.5rem", letterSpacing: "-1px" }}>doctaa</span>
         <Link href="/doctor" style={{ color: "rgba(255,255,255,0.5)", fontSize: "0.875rem", fontWeight: 500 }} className="hover:text-white transition-colors">
           Log in
@@ -199,174 +173,75 @@ function Navbar() {
 function Hero() {
   const [value, setValue] = useState("")
   const [focused, setFocused] = useState(false)
-
   return (
-    <section style={{
-      minHeight: "100dvh", backgroundColor: NAVY, position: "relative",
-      display: "flex", flexDirection: "column", alignItems: "center",
-      justifyContent: "center", padding: "6rem 1.5rem 3rem", overflow: "hidden",
-    }}>
+    <section style={{ minHeight: "100dvh", backgroundColor: NAVY, position: "relative", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "6rem 1.5rem 3rem", overflow: "hidden" }}>
       <OrbBackground />
-
       <div style={{ position: "relative", width: "100%", maxWidth: "640px", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}>
 
-        {/* Avatar cluster */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          style={{ display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "2rem" }}
-        >
-          <motion.div
-            animate={{ boxShadow: [`0 0 0 0px ${PINK}44`, `0 0 0 10px ${PINK}00`] }}
-            transition={{ duration: 2, repeat: Infinity }}
-            style={{
-              width: "58px", height: "58px", borderRadius: "50%",
-              background: `linear-gradient(135deg, ${PINK}, #a83460)`,
-              display: "flex", alignItems: "center", justifyContent: "center",
-              border: `3px solid ${NAVY}`, zIndex: 3, fontSize: "1.6rem",
-            }}
-          >
+        <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          style={{ display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "2rem" }}>
+          <motion.div animate={{ boxShadow: [`0 0 0 0px ${PINK}44`, `0 0 0 10px ${PINK}00`] }} transition={{ duration: 2, repeat: Infinity }}
+            style={{ width: "58px", height: "58px", borderRadius: "50%", background: `linear-gradient(135deg, ${PINK}, #a83460)`, display: "flex", alignItems: "center", justifyContent: "center", border: `3px solid ${NAVY}`, zIndex: 3, fontSize: "1.6rem" }}>
             🩺
           </motion.div>
           {["👩‍⚕️", "👨‍⚕️"].map((e, i) => (
-            <div key={i} style={{
-              width: "48px", height: "48px", borderRadius: "50%",
-              backgroundColor: i === 0 ? "#1a3a6e" : "#162d55",
-              fontSize: "1.2rem", display: "flex", alignItems: "center", justifyContent: "center",
-              border: `3px solid ${NAVY}`, marginLeft: "-10px", zIndex: 2 - i,
-            }}>{e}</div>
+            <div key={i} style={{ width: "48px", height: "48px", borderRadius: "50%", backgroundColor: i === 0 ? "#1a3a6e" : "#162d55", fontSize: "1.2rem", display: "flex", alignItems: "center", justifyContent: "center", border: `3px solid ${NAVY}`, marginLeft: "-10px", zIndex: 2 - i }}>{e}</div>
           ))}
         </motion.div>
 
-        {/* Headline */}
-        <motion.h1
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-          style={{ color: "#fff", fontSize: "clamp(2.5rem, 7vw, 4rem)", fontWeight: 800, lineHeight: 1.08, letterSpacing: "-2.5px", marginBottom: "1rem" }}
-        >
+        <motion.h1 initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+          style={{ color: "#fff", fontSize: "clamp(2.5rem, 7vw, 4rem)", fontWeight: 800, lineHeight: 1.08, letterSpacing: "-2.5px", marginBottom: "1rem" }}>
           Hi, I&apos;m <span style={{ color: PINK }}>doctaa.</span>
         </motion.h1>
 
-        {/* Animated tagline */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.65, delay: 0.28, ease: [0.22, 1, 0.36, 1] }}
-          style={{ fontSize: "clamp(1.1rem, 2.5vw, 1.4rem)", fontWeight: 700, letterSpacing: "-0.5px", marginBottom: "1rem", minHeight: "2rem" }}
-        >
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65, delay: 0.28, ease: [0.22, 1, 0.36, 1] }}
+          style={{ fontSize: "clamp(1.1rem, 2.5vw, 1.4rem)", fontWeight: 700, letterSpacing: "-0.5px", marginBottom: "1rem", minHeight: "2rem" }}>
           <span style={{ color: "rgba(255,255,255,0.7)" }}>Your care, </span>
           <Typewriter />
         </motion.div>
 
-        <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.65, delay: 0.38, ease: [0.22, 1, 0.36, 1] }}
-          style={{ color: "rgba(255,255,255,0.4)", fontSize: "0.95rem", lineHeight: 1.75, marginBottom: "2.5rem", maxWidth: "460px" }}
-        >
+        <motion.p initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65, delay: 0.38, ease: [0.22, 1, 0.36, 1] }}
+          style={{ color: "rgba(255,255,255,0.4)", fontSize: "0.95rem", lineHeight: 1.75, marginBottom: "2.5rem", maxWidth: "460px" }}>
           I&apos;m your private AI doctor. I&apos;ve already helped Australians{" "}
-          <strong style={{ color: "rgba(255,255,255,0.65)", fontWeight: 600 }}>
-            <Counter to={1247830} suffix=" times" />
-          </strong>. After we chat, you can book a real GP if needed.
+          <strong style={{ color: "rgba(255,255,255,0.65)", fontWeight: 600 }}><Counter to={1247830} suffix=" times" /></strong>.{" "}
+          After we chat, you can book a real GP if needed.
         </motion.p>
 
-        {/* Chat input */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.48, ease: [0.22, 1, 0.36, 1] }}
-          style={{ width: "100%" }}
-        >
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.48, ease: [0.22, 1, 0.36, 1] }} style={{ width: "100%" }}>
           <motion.div
-            animate={focused ? {
-              boxShadow: `0 0 0 1.5px ${PINK}90, 0 0 40px ${PINK}28, 0 20px 60px rgba(0,0,0,0.5)`,
-              borderColor: `${PINK}70`,
-            } : {
-              boxShadow: `0 0 30px ${PINK}10, 0 20px 50px rgba(0,0,0,0.4)`,
-              borderColor: "rgba(255,255,255,0.1)",
-            }}
+            animate={focused ? { boxShadow: `0 0 0 1.5px ${PINK}90, 0 0 40px ${PINK}28, 0 20px 60px rgba(0,0,0,0.5)`, borderColor: `${PINK}70` } : { boxShadow: `0 0 30px ${PINK}10, 0 20px 50px rgba(0,0,0,0.4)`, borderColor: "rgba(255,255,255,0.1)" }}
             transition={{ duration: 0.2 }}
-            style={{
-              width: "100%",
-              backgroundColor: "rgba(255,255,255,0.05)",
-              border: "1.5px solid rgba(255,255,255,0.1)",
-              borderRadius: "1.25rem",
-              padding: "1.25rem",
-              backdropFilter: "blur(16px)",
-            }}
+            style={{ width: "100%", backgroundColor: "rgba(255,255,255,0.05)", border: "1.5px solid rgba(255,255,255,0.1)", borderRadius: "1.25rem", padding: "1.25rem", backdropFilter: "blur(16px)" }}
           >
-            <textarea
-              value={value}
-              onChange={e => setValue(e.target.value)}
-              onFocus={() => setFocused(true)}
-              onBlur={() => setFocused(false)}
-              placeholder="What's going on? Describe your symptoms..."
-              rows={3}
-              style={{
-                width: "100%", background: "transparent", border: "none", outline: "none",
-                color: "#fff", fontSize: "1rem", lineHeight: 1.65, resize: "none",
-                fontFamily: "inherit", marginBottom: "0.75rem",
-              }}
-            />
+            <textarea value={value} onChange={e => setValue(e.target.value)} onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
+              placeholder="What's going on? Describe your symptoms..." rows={3}
+              style={{ width: "100%", background: "transparent", border: "none", outline: "none", color: "#fff", fontSize: "1rem", lineHeight: 1.65, resize: "none", fontFamily: "inherit", marginBottom: "0.75rem" }} />
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
               <span style={{ color: "rgba(255,255,255,0.22)", fontSize: "0.72rem", display: "flex", alignItems: "center", gap: "0.35rem" }}>
                 <Lock size={10} /> Private · Australian Privacy Act
               </span>
-              <motion.button
-                whileHover={{ scale: 1.04 }}
-                whileTap={{ scale: 0.97 }}
-                style={{
-                  backgroundColor: value.trim() ? PINK : "rgba(255,255,255,0.08)",
-                  color: value.trim() ? "#fff" : "rgba(255,255,255,0.25)",
-                  border: "none", borderRadius: "0.65rem",
-                  padding: "0.5rem 1.1rem", fontSize: "0.875rem", fontWeight: 600,
-                  cursor: value.trim() ? "pointer" : "default",
-                  display: "flex", alignItems: "center", gap: "0.4rem",
-                  transition: "background-color 0.15s, color 0.15s", fontFamily: "inherit",
-                }}
-              >
+              <motion.button whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}
+                style={{ backgroundColor: value.trim() ? PINK : "rgba(255,255,255,0.08)", color: value.trim() ? "#fff" : "rgba(255,255,255,0.25)", border: "none", borderRadius: "0.65rem", padding: "0.5rem 1.1rem", fontSize: "0.875rem", fontWeight: 600, cursor: value.trim() ? "pointer" : "default", display: "flex", alignItems: "center", gap: "0.4rem", transition: "background-color 0.15s, color 0.15s", fontFamily: "inherit" }}>
                 Get started <Send size={13} />
               </motion.button>
             </div>
           </motion.div>
         </motion.div>
 
-        {/* Suggestion chips */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.7, duration: 0.5 }}
-          style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", justifyContent: "center", marginTop: "1rem" }}
-        >
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.7, duration: 0.5 }}
+          style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", justifyContent: "center", marginTop: "1rem" }}>
           {SUGGESTIONS.map((s, i) => (
-            <motion.button
-              key={s}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.75 + i * 0.07, duration: 0.4 }}
+            <motion.button key={s} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.75 + i * 0.07, duration: 0.4 }}
               whileHover={{ backgroundColor: `${PINK}22`, borderColor: `${PINK}60`, color: "rgba(255,255,255,0.85)" }}
               onClick={() => setValue(s)}
-              style={{
-                backgroundColor: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)",
-                borderRadius: "9999px", color: "rgba(255,255,255,0.45)",
-                fontSize: "0.77rem", padding: "0.35rem 0.85rem",
-                cursor: "pointer", fontFamily: "inherit",
-              }}
-            >
+              style={{ backgroundColor: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "9999px", color: "rgba(255,255,255,0.45)", fontSize: "0.77rem", padding: "0.35rem 0.85rem", cursor: "pointer", fontFamily: "inherit" }}>
               {s}
             </motion.button>
           ))}
         </motion.div>
 
-        {/* Scroll cue */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0.3 }}
-          transition={{ delay: 1.2 }}
-          style={{ marginTop: "4rem", display: "flex", flexDirection: "column", alignItems: "center", gap: "0.35rem" }}
-        >
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 0.3 }} transition={{ delay: 1.2 }}
+          style={{ marginTop: "4rem", display: "flex", flexDirection: "column", alignItems: "center", gap: "0.35rem" }}>
           <motion.div animate={{ y: [0, 5, 0] }} transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}>
             <ChevronDown size={18} color="#fff" />
           </motion.div>
@@ -376,117 +251,134 @@ function Hero() {
   )
 }
 
-// ─── Stats ────────────────────────────────────────────────────────────────────
-function StatsBar() {
+// ─── Statement ────────────────────────────────────────────────────────────────
+// Bold editorial problem/solution — no icons, no grid, just words
+function Statement() {
   return (
-    <section style={{ backgroundColor: PINK, padding: "2.75rem 1.5rem" }}>
-      <div style={{ maxWidth: "900px", margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "1.5rem" }}>
-        {STATS.map(({ value, label, icon: Icon }, i) => (
-          <FadeUp key={label} delay={i * 0.08}>
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.4rem" }}>
-              <span style={{ color: "#fff", fontWeight: 800, fontSize: "1.9rem", letterSpacing: "-1px", lineHeight: 1 }}>{value}</span>
-              <span style={{ color: "rgba(255,255,255,0.65)", fontSize: "0.75rem", display: "flex", alignItems: "center", gap: "4px" }}>
-                <Icon size={11} />{label}
-              </span>
+    <section style={{ backgroundColor: CREAM, padding: "7rem 1.5rem" }}>
+      <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+        <FadeUp>
+          <p style={{ color: PINK, fontWeight: 700, fontSize: "0.72rem", letterSpacing: "3px", textTransform: "uppercase", marginBottom: "2.5rem" }}>
+            The problem
+          </p>
+        </FadeUp>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "4rem", alignItems: "end" }}>
+          <FadeUp delay={0.05}>
+            <h2 style={{ color: NAVY, fontWeight: 800, fontSize: "clamp(2.5rem, 5vw, 4.5rem)", lineHeight: 1.0, letterSpacing: "-3px", margin: 0 }}>
+              The average Australian waits{" "}
+              <span style={{ color: PINK }}>2 weeks</span>{" "}
+              to see a GP.
+            </h2>
+          </FadeUp>
+          <FadeUp delay={0.15}>
+            <div>
+              <p style={{ color: "rgba(10,22,40,0.55)", fontSize: "1.1rem", lineHeight: 1.8, marginBottom: "2rem" }}>
+                You shouldn&apos;t have to wait to know if something&apos;s wrong. Doctaa gives you instant, clinically-informed guidance — and books you in when you need the real thing.
+              </p>
+              <Link href="/doctor"
+                style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", color: NAVY, fontWeight: 700, fontSize: "0.95rem", borderBottom: `2px solid ${PINK}`, paddingBottom: "2px" }}>
+                Try it now <ArrowRight size={15} />
+              </Link>
             </div>
           </FadeUp>
-        ))}
-      </div>
-    </section>
-  )
-}
-
-// ─── Features ─────────────────────────────────────────────────────────────────
-function Features() {
-  return (
-    <section id="features" style={{ backgroundColor: CREAM, padding: "7rem 1.5rem" }}>
-      <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
-        <FadeUp>
-          <div style={{ textAlign: "center", marginBottom: "4rem" }}>
-            <p style={{ color: PINK, fontWeight: 700, fontSize: "0.7rem", letterSpacing: "2.5px", textTransform: "uppercase", marginBottom: "1rem" }}>
-              What doctaa does
-            </p>
-            <h2 style={{ color: NAVY, fontWeight: 800, fontSize: "clamp(2rem,4vw,3rem)", letterSpacing: "-1.5px", lineHeight: 1.1 }}>
-              Everything you need.<br />Nothing you don&apos;t.
-            </h2>
-          </div>
-        </FadeUp>
-
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "1.25rem" }}>
-          {FEATURES.map(({ icon: Icon, title, desc }, i) => (
-            <FadeUp key={title} delay={i * 0.1}>
-              <motion.div
-                whileHover={{ y: -4, boxShadow: i % 2 === 0 ? "0 16px 40px rgba(10,22,40,0.12)" : `0 16px 40px ${PINK}20` }}
-                transition={{ duration: 0.2 }}
-                style={{
-                  backgroundColor: i % 2 === 0 ? "#fff" : NAVY,
-                  borderRadius: "1.25rem", padding: "2.25rem",
-                  border: i % 2 === 0 ? "1px solid rgba(10,22,40,0.07)" : "none",
-                  height: "100%",
-                }}
-              >
-                <div style={{
-                  width: "2.75rem", height: "2.75rem", borderRadius: "0.75rem",
-                  backgroundColor: i % 2 === 0 ? `${PINK}18` : `${PINK}28`,
-                  display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1.25rem",
-                }}>
-                  <Icon size={20} style={{ color: PINK }} />
-                </div>
-                <h3 style={{ color: i % 2 === 0 ? NAVY : "#fff", fontWeight: 700, fontSize: "1.05rem", marginBottom: "0.6rem" }}>{title}</h3>
-                <p style={{ color: i % 2 === 0 ? "rgba(10,22,40,0.5)" : "rgba(255,255,255,0.4)", fontSize: "0.875rem", lineHeight: 1.7 }}>{desc}</p>
-              </motion.div>
-            </FadeUp>
-          ))}
         </div>
       </div>
     </section>
   )
 }
 
-// ─── How it works ─────────────────────────────────────────────────────────────
-function HowItWorks() {
+// ─── Numbers ──────────────────────────────────────────────────────────────────
+// Editorial, scattered — not a neat grid
+function Numbers() {
   return (
-    <section id="how-it-works" style={{ backgroundColor: NAVY, padding: "7rem 1.5rem", position: "relative", overflow: "hidden" }}>
-      {/* Subtle orb */}
-      <div style={{
-        position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)",
-        width: "600px", height: "400px", pointerEvents: "none",
-        background: `radial-gradient(ellipse, ${PINK}0e 0%, transparent 65%)`,
-      }} />
-      <div style={{ maxWidth: "1100px", margin: "0 auto", position: "relative" }}>
+    <section style={{ backgroundColor: NAVY, padding: "6rem 1.5rem", overflow: "hidden" }}>
+      <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(12, 1fr)", gap: "1.5rem", alignItems: "center" }}>
+          {/* Big number — spans 5 cols */}
+          <FadeUp>
+            <div style={{ gridColumn: "span 5" }}>
+              <div style={{ color: "#fff", fontWeight: 800, fontSize: "clamp(5rem, 12vw, 9rem)", lineHeight: 1, letterSpacing: "-5px" }}>
+                1.2<span style={{ color: PINK }}>M</span>
+              </div>
+              <p style={{ color: "rgba(255,255,255,0.35)", fontSize: "0.9rem", marginTop: "0.75rem", letterSpacing: "0.5px" }}>
+                Australians helped
+              </p>
+            </div>
+          </FadeUp>
+
+          {/* Divider */}
+          <div style={{ gridColumn: "span 1", height: "100px", width: "1px", backgroundColor: "rgba(255,255,255,0.1)", margin: "0 auto" }} />
+
+          {/* Stacked smaller stats */}
+          <div style={{ gridColumn: "span 6", display: "flex", flexDirection: "column", gap: "2.5rem" }}>
+            {[
+              { val: "< 2 min", label: "Average response time" },
+              { val: "4.8 ★",   label: "App Store rating" },
+              { val: "24 / 7",  label: "Always available" },
+            ].map(({ val, label }, i) => (
+              <FadeIn key={label} delay={i * 0.12}>
+                <div style={{ display: "flex", alignItems: "baseline", gap: "1.5rem", borderBottom: "1px solid rgba(255,255,255,0.07)", paddingBottom: "2rem" }}>
+                  <span style={{ color: "#fff", fontWeight: 800, fontSize: "clamp(2rem, 4vw, 3rem)", letterSpacing: "-2px", minWidth: "120px" }}>{val}</span>
+                  <span style={{ color: "rgba(255,255,255,0.35)", fontSize: "0.85rem" }}>{label}</span>
+                </div>
+              </FadeIn>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// ─── Features — editorial list ────────────────────────────────────────────────
+function Features() {
+  const [hovered, setHovered] = useState<number | null>(null)
+  return (
+    <section style={{ backgroundColor: CREAM, padding: "7rem 1.5rem" }}>
+      <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
         <FadeUp>
-          <div style={{ textAlign: "center", marginBottom: "4.5rem" }}>
-            <p style={{ color: PINK, fontWeight: 700, fontSize: "0.7rem", letterSpacing: "2.5px", textTransform: "uppercase", marginBottom: "1rem" }}>
-              How it works
-            </p>
-            <h2 style={{ color: "#fff", fontWeight: 800, fontSize: "clamp(2rem,4vw,3rem)", letterSpacing: "-1.5px", lineHeight: 1.1 }}>
-              Care in three steps.
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "4rem", gap: "2rem", flexWrap: "wrap" }}>
+            <h2 style={{ color: NAVY, fontWeight: 800, fontSize: "clamp(2rem, 4vw, 3.25rem)", letterSpacing: "-2px", lineHeight: 1.05, margin: 0 }}>
+              Everything in<br />one place.
             </h2>
+            <p style={{ color: "rgba(10,22,40,0.45)", fontSize: "0.9rem", lineHeight: 1.75, maxWidth: "280px", margin: 0 }}>
+              No more juggling apps, portals, and paper records.
+            </p>
           </div>
         </FadeUp>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "2.5rem" }}>
-          {STEPS.map(({ n, title, body }, i) => (
-            <FadeUp key={n} delay={i * 0.15}>
-              <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
-                <motion.div
-                  whileInView={{ borderColor: PINK }}
-                  initial={{ borderColor: "rgba(212,83,126,0.3)" }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: i * 0.15 + 0.3 }}
-                  style={{
-                    width: "3rem", height: "3rem", borderRadius: "50%", border: `2px solid`,
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    color: PINK, fontWeight: 800, fontSize: "0.78rem", letterSpacing: "0.5px",
-                  }}
-                >
-                  {n}
+        {/* Editorial list */}
+        <div>
+          {FEATURES.map(({ num, title, desc }, i) => (
+            <FadeUp key={num} delay={i * 0.08}>
+              <motion.div
+                onHoverStart={() => setHovered(i)}
+                onHoverEnd={() => setHovered(null)}
+                style={{
+                  display: "grid", gridTemplateColumns: "80px 1fr auto",
+                  alignItems: "center", gap: "2rem",
+                  padding: "2rem 1.5rem",
+                  borderTop: "1px solid rgba(10,22,40,0.1)",
+                  borderRadius: "1rem",
+                  cursor: "default",
+                  backgroundColor: hovered === i ? "rgba(10,22,40,0.04)" : "transparent",
+                  transition: "background-color 0.2s",
+                }}
+              >
+                <span style={{ color: hovered === i ? PINK : "rgba(10,22,40,0.25)", fontWeight: 700, fontSize: "0.8rem", letterSpacing: "1px", transition: "color 0.2s" }}>
+                  {num}
+                </span>
+                <div>
+                  <h3 style={{ color: NAVY, fontWeight: 700, fontSize: "clamp(1.1rem, 2vw, 1.35rem)", letterSpacing: "-0.5px", marginBottom: "0.4rem" }}>{title}</h3>
+                  <p style={{ color: "rgba(10,22,40,0.5)", fontSize: "0.875rem", lineHeight: 1.7, margin: 0, maxWidth: "520px" }}>{desc}</p>
+                </div>
+                <motion.div animate={{ opacity: hovered === i ? 1 : 0, x: hovered === i ? 0 : -6 }} transition={{ duration: 0.2 }}>
+                  <ArrowUpRight size={20} style={{ color: PINK }} />
                 </motion.div>
-                <h3 style={{ color: "#fff", fontWeight: 700, fontSize: "1.1rem" }}>{title}</h3>
-                <p style={{ color: "rgba(255,255,255,0.38)", fontSize: "0.875rem", lineHeight: 1.75 }}>{body}</p>
-              </div>
+              </motion.div>
             </FadeUp>
           ))}
+          <div style={{ borderTop: "1px solid rgba(10,22,40,0.1)" }} />
         </div>
       </div>
     </section>
@@ -494,77 +386,49 @@ function HowItWorks() {
 }
 
 // ─── For Doctors ──────────────────────────────────────────────────────────────
+// Full-bleed dark section, big statement left, clean mockup right
 function ForDoctors() {
-  const perks = [
-    "AI-generated consultation notes",
-    "Integrated scheduling & telehealth",
-    "Automated patient follow-ups",
-    "Secure messaging & referrals",
-  ]
   return (
-    <section id="for-doctors" style={{ backgroundColor: CREAM, padding: "7rem 1.5rem" }}>
-      <div style={{ maxWidth: "1100px", margin: "0 auto", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "5rem", alignItems: "center" }}>
+    <section style={{ backgroundColor: NAVY, padding: "7rem 1.5rem", position: "relative", overflow: "hidden" }}>
+      <div style={{ position: "absolute", bottom: "-20%", right: "-5%", width: "500px", height: "500px", borderRadius: "50%", background: `radial-gradient(ellipse, ${PINK}0e 0%, transparent 65%)`, pointerEvents: "none" }} />
+      <div style={{ maxWidth: "1200px", margin: "0 auto", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "6rem", alignItems: "center" }}>
         <FadeUp>
           <div>
-            <p style={{ color: PINK, fontWeight: 700, fontSize: "0.7rem", letterSpacing: "2.5px", textTransform: "uppercase", marginBottom: "1rem" }}>
-              For clinicians
-            </p>
-            <h2 style={{ color: NAVY, fontWeight: 800, fontSize: "clamp(2rem,4vw,2.75rem)", letterSpacing: "-1.5px", lineHeight: 1.1, marginBottom: "1.25rem" }}>
-              Less admin.<br />More care.
+            <p style={{ color: PINK, fontWeight: 700, fontSize: "0.7rem", letterSpacing: "3px", textTransform: "uppercase", marginBottom: "1.5rem" }}>For clinicians</p>
+            <h2 style={{ color: "#fff", fontWeight: 800, fontSize: "clamp(2rem, 4vw, 3.25rem)", letterSpacing: "-2px", lineHeight: 1.05, marginBottom: "1.5rem" }}>
+              Less admin.<br />More patients.<br /><span style={{ color: PINK }}>More care.</span>
             </h2>
-            <p style={{ color: "rgba(10,22,40,0.5)", fontSize: "0.95rem", lineHeight: 1.75, marginBottom: "2rem" }}>
-              Doctaa handles the paperwork so you can focus on patients. Built for how Australian clinicians actually work.
+            <p style={{ color: "rgba(255,255,255,0.4)", fontSize: "0.95rem", lineHeight: 1.8, marginBottom: "2.5rem", maxWidth: "380px" }}>
+              AI-generated notes, smart scheduling, and seamless patient communication — built for how Australian clinicians actually work.
             </p>
-            <ul style={{ display: "flex", flexDirection: "column", gap: "0.875rem", marginBottom: "2.25rem" }}>
-              {perks.map((p, i) => (
-                <motion.li
-                  key={p}
-                  initial={{ opacity: 0, x: -12 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1, duration: 0.45 }}
-                  style={{ display: "flex", alignItems: "center", gap: "0.65rem" }}
-                >
-                  <CheckCircle2 size={16} style={{ color: PINK, flexShrink: 0 }} />
-                  <span style={{ color: NAVY, fontSize: "0.9rem" }}>{p}</span>
-                </motion.li>
-              ))}
-            </ul>
-            <Link href="/doctor" style={{ color: PINK, fontWeight: 700, fontSize: "0.9rem", display: "inline-flex", alignItems: "center", gap: "0.4rem" }}>
-              Explore the clinician portal <ArrowRight size={15} />
+            <Link href="/doctor" style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", backgroundColor: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", color: "#fff", fontWeight: 600, fontSize: "0.9rem", padding: "0.75rem 1.5rem", borderRadius: "9999px" }}
+              className="hover:bg-white/10 transition-colors">
+              Open clinician portal <ArrowRight size={15} />
             </Link>
           </div>
         </FadeUp>
 
         <FadeUp delay={0.15}>
-          <div style={{ backgroundColor: NAVY, borderRadius: "1.5rem", padding: "2rem", overflow: "hidden" }}>
-            <p style={{ color: "rgba(255,255,255,0.28)", fontSize: "0.68rem", textTransform: "uppercase", letterSpacing: "1.5px", fontWeight: 600, marginBottom: "1.5rem" }}>
+          <div style={{ backgroundColor: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "1.5rem", padding: "2rem", backdropFilter: "blur(8px)" }}>
+            <div style={{ color: "rgba(255,255,255,0.25)", fontSize: "0.68rem", textTransform: "uppercase", letterSpacing: "1.5px", fontWeight: 600, marginBottom: "1.75rem" }}>
               Today&apos;s snapshot
-            </p>
+            </div>
             {[
-              { label: "Appointments", value: "12", sub: "3 telehealth" },
-              { label: "Pending notes", value: "2",  sub: "AI draft ready" },
-              { label: "New messages", value: "5",  sub: "1 urgent" },
+              { label: "Appointments today",  value: "12", sub: "3 telehealth · 9 in-person" },
+              { label: "AI notes ready",       value: "2",  sub: "Draft generated, needs review" },
+              { label: "Unread messages",      value: "5",  sub: "1 flagged urgent" },
+              { label: "Avg wait time",        value: "8m", sub: "Down 40% vs last month" },
             ].map(({ label, value, sub }, i) => (
-              <motion.div
-                key={label}
-                initial={{ opacity: 0, x: 16 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.12, duration: 0.4 }}
-                whileHover={{ backgroundColor: "rgba(255,255,255,0.08)" }}
-                style={{
-                  backgroundColor: "rgba(255,255,255,0.05)", borderRadius: "0.875rem",
-                  padding: "1rem 1.1rem", marginBottom: "0.75rem",
-                  display: "flex", justifyContent: "space-between", alignItems: "center",
-                  border: "1px solid rgba(255,255,255,0.06)", transition: "background 0.15s",
-                }}
-              >
+              <motion.div key={label}
+                initial={{ opacity: 0, x: 16 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
+                transition={{ delay: i * 0.1, duration: 0.4 }}
+                whileHover={{ backgroundColor: "rgba(255,255,255,0.07)" }}
+                style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0.875rem 1rem", borderRadius: "0.75rem", marginBottom: "0.5rem", transition: "background 0.15s" }}>
                 <div>
-                  <div style={{ color: "#fff", fontWeight: 600, fontSize: "0.9rem" }}>{label}</div>
-                  <div style={{ color: "rgba(255,255,255,0.28)", fontSize: "0.7rem", marginTop: "2px" }}>{sub}</div>
+                  <div style={{ color: "rgba(255,255,255,0.75)", fontWeight: 500, fontSize: "0.875rem" }}>{label}</div>
+                  <div style={{ color: "rgba(255,255,255,0.25)", fontSize: "0.7rem", marginTop: "2px" }}>{sub}</div>
                 </div>
-                <span style={{ color: PINK, fontWeight: 800, fontSize: "1.6rem", letterSpacing: "-1px" }}>{value}</span>
+                <span style={{ color: PINK, fontWeight: 800, fontSize: "1.5rem", letterSpacing: "-1px" }}>{value}</span>
               </motion.div>
             ))}
           </div>
@@ -575,36 +439,30 @@ function ForDoctors() {
 }
 
 // ─── CTA ──────────────────────────────────────────────────────────────────────
+// Minimal, dark, personal — not a pink slab
 function CtaBanner() {
   return (
-    <section style={{ backgroundColor: PINK, padding: "6rem 1.5rem", position: "relative", overflow: "hidden" }}>
-      <motion.div
-        animate={{ scale: [1, 1.15, 1], opacity: [0.3, 0.5, 0.3] }}
-        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        style={{
-          position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)",
-          width: "700px", height: "400px", pointerEvents: "none",
-          background: "radial-gradient(ellipse, rgba(255,255,255,0.12) 0%, transparent 65%)",
-        }}
-      />
-      <div style={{ maxWidth: "640px", margin: "0 auto", textAlign: "center", position: "relative" }}>
+    <section style={{ backgroundColor: CREAM, padding: "8rem 1.5rem" }}>
+      <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
         <FadeUp>
-          <h2 style={{ color: "#fff", fontWeight: 800, fontSize: "clamp(2rem,5vw,3rem)", letterSpacing: "-1.5px", lineHeight: 1.1, marginBottom: "1.25rem" }}>
-            Ready to take control<br />of your health?
-          </h2>
-          <p style={{ color: "rgba(255,255,255,0.65)", fontSize: "1rem", lineHeight: 1.75, marginBottom: "2.25rem" }}>
-            Join Australians who already manage their care with doctaa.<br />Free to start. No credit card.
-          </p>
-          <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }} style={{ display: "inline-block" }}>
-            <Link href="/doctor" style={{
-              display: "inline-flex", alignItems: "center", gap: "0.5rem",
-              backgroundColor: "#fff", color: PINK, fontWeight: 700, fontSize: "1rem",
-              padding: "0.9rem 2.25rem", borderRadius: "9999px",
-              boxShadow: "0 8px 30px rgba(0,0,0,0.15)",
-            }}>
-              Start chatting free <ArrowRight size={17} />
-            </Link>
-          </motion.div>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr auto", alignItems: "center", gap: "3rem", flexWrap: "wrap" }}>
+            <div>
+              <h2 style={{ color: NAVY, fontWeight: 800, fontSize: "clamp(2.5rem, 6vw, 5rem)", letterSpacing: "-3px", lineHeight: 0.95, margin: 0 }}>
+                Your health,<br />
+                <span style={{ color: PINK }}>sorted.</span>
+              </h2>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "1rem", alignItems: "flex-start" }}>
+              <p style={{ color: "rgba(10,22,40,0.5)", fontSize: "0.9rem", lineHeight: 1.75, maxWidth: "280px", margin: 0 }}>
+                Free to start. No credit card. Join Australians already using doctaa.
+              </p>
+              <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
+                <Link href="/doctor" style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", backgroundColor: NAVY, color: "#fff", fontWeight: 700, fontSize: "0.95rem", padding: "0.9rem 2rem", borderRadius: "9999px" }}>
+                  Start for free <ArrowRight size={16} />
+                </Link>
+              </motion.div>
+            </div>
+          </div>
         </FadeUp>
       </div>
     </section>
@@ -620,7 +478,7 @@ function Footer() {
   ]
   return (
     <footer style={{ backgroundColor: NAVY, borderTop: "1px solid rgba(255,255,255,0.06)", padding: "4rem 1.5rem 2.5rem" }}>
-      <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
+      <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
         <div style={{ display: "flex", justifyContent: "space-between", gap: "3rem", flexWrap: "wrap", marginBottom: "3rem" }}>
           <div>
             <div style={{ color: PINK, fontWeight: 800, fontSize: "1.4rem", letterSpacing: "-1px", marginBottom: "0.35rem" }}>doctaa</div>
@@ -632,9 +490,7 @@ function Footer() {
               <div key={heading}>
                 <div style={{ color: "rgba(255,255,255,0.3)", fontSize: "0.68rem", fontWeight: 700, letterSpacing: "1.5px", textTransform: "uppercase", marginBottom: "1rem" }}>{heading}</div>
                 <ul style={{ display: "flex", flexDirection: "column", gap: "0.625rem" }}>
-                  {links.map(l => (
-                    <li key={l}><a href="#" style={{ color: "rgba(255,255,255,0.38)", fontSize: "0.84rem" }} className="hover:text-white transition-colors">{l}</a></li>
-                  ))}
+                  {links.map(l => <li key={l}><a href="#" style={{ color: "rgba(255,255,255,0.38)", fontSize: "0.84rem" }} className="hover:text-white transition-colors">{l}</a></li>)}
                 </ul>
               </div>
             ))}
@@ -656,9 +512,9 @@ export default function LandingPage() {
       <Navbar />
       <main>
         <Hero />
-        <StatsBar />
+        <Statement />
+        <Numbers />
         <Features />
-        <HowItWorks />
         <ForDoctors />
         <CtaBanner />
       </main>
